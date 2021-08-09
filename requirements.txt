@@ -3,4 +3,5 @@ discord==1.7.3
 discord.py==1.7.3
 disrank==0.0.2
 python-dotenv==0.18.0
+easy-pil==0.0.2
 
