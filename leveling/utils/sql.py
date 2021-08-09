@@ -8,8 +8,8 @@ async def create_tables(pool: Pool):
             CREATE TABLE IF NOT EXISTS users(
                 user_id BIGINT NOT NULL PRIMARY KEY,
                 guild_id BIGINT NOT NULL,
-                xp BIGINT NOT NULL DEFAULT 0,
-                level BIGINT NOT NULL DEFAULT 1
+                xp BIGINT NOT NULL DEFAULT 5,
+                level BIGINT NOT NULL DEFAULT 0
             )
         """)
 
