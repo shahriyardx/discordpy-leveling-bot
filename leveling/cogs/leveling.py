@@ -18,8 +18,7 @@ class Level(commands.Cog):
         background = Canvas((934, 282), "#23272a")
         profile = await load_image_async(str(ctx.author.avatar_url_as(format='png')))
         profile = Editor(profile).resize((190, 190)).circle_image()
-        print(dir(background))
-        editor = Editor(canvas=background)
+        editor = Editor(background.image)
         font = Font().poppins(size=30)
 
         editor.rectangle((20, 20), 894, 242, "#2a2e35")
