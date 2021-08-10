@@ -1,3 +1,4 @@
+from json import load
 from discord import File
 from discord.ext import commands
 from leveling.utils import get_user_data, get_rank
@@ -14,24 +15,39 @@ class Level(commands.Cog):
     async def rank(self, ctx):
         user_data = await get_user_data(self.bot.db, ctx.message)
         rank = await get_rank(self.bot.db, ctx.message)
-
-        background = Canvas((934, 282), "#23272a")
-        profile = await load_image_async(str(ctx.author.avatar_url_as(format='png')))
-        profile = Editor(profile).resize((190, 190)).circle_image()
-        editor = Editor(background.image)
-        font = Font().poppins(size=30)
-
-        editor.rectangle((20, 20), 894, 242, "#2a2e35")
-        editor.paste(profile.image, (50, 50))
-        editor.ellipse((42, 42), width=206, height=206, outline="#43b581", stroke_width=10)
-        editor.rectangle((260, 180), width=630, height=40, fill="#484b4e", radius=20)
-        editor.bar((260, 180), max_width=630, height=40, percentage=30, fill="#00fa81", radius=20)
-        editor.text((270, 120), str(ctx.author), font=font, color="#00fa81")
-        editor.text((870, 125), f"{user_data['xp']} / {(user_data['level'] + 1) * 100}", font=font, color="#00fa81", anchor="rt")
-        editor.text((870, 30), f"Rank {rank}    Level {user_data['level']}", font=font, color="#00fa81", anchor="rt")
         
-        file = File(fp=editor.image_bytes, filename="card.png")
-        
+        next_level_xp = (user_data['level'] + 1) * 100
+        current_level_xp = user_data['level'] * 100
+        xp_need = next_level_xp - current_level_xp
+        xp_have = user_data['xp'] - current_level_xp
+
+        percentage = (xp_need / 100 ) * xp_have
+        print(percentage)
+
+        ## Rank card
+        background = Editor("leveling/assets/bg.png")
+        profile = await load_image_async(str(ctx.author.avatar_url))
+
+        profile = Editor(profile).resize((150, 150)).circle_image()
+
+        poppins = Font().poppins(size=40)
+        poppins_small = Font().poppins(size=30)
+
+        square = Canvas((500, 500), "#06FFBF")
+        square = Editor(canvas=square)
+        square.rotate(30, expand=True)
+
+        background.paste(square.image, (600, -250))
+        background.paste(profile.image, (30, 30))
+
+        background.rectangle((30, 220), width=650, height=40, fill="white", radius=20)
+        background.bar((30, 220), max_width=650, height=40, percentage=percentage ,fill="#FF56B2", radius=20)
+        background.text((200, 40), str(ctx.author), font=poppins, color="white")
+
+        background.rectangle((200, 100), width=350, height=2, fill="#17F3F6")
+        background.text((200, 130), f"Level : {user_data['level']}" + f" XP : {user_data['xp']} / {(user_data['level'] + 1) * 100}", font=poppins_small, color="white")
+
+        file = File(fp=background.image_bytes, filename="card.png")
         await ctx.send(file=file)
 
 
