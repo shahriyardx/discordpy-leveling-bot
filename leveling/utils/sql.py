@@ -31,12 +31,12 @@ async def create_user(pool: Pool, user_id, guild_id):
         )
 
 
-async def increase_xp(pool: Pool, user_id, guild_id, rate=5):
-    await create_user(pool, user_id, guild_id)
+async def increase_xp(pool: Pool, message, rate=5):
+    await create_user(pool, message.author.id, message.guild.id)
 
     async with pool.acquire() as connection:
         record = await connection.fetchrow(
-            "SELECT * FROM users WHERE user_id=$1 AND guild_id=$2", user_id, guild_id
+            "SELECT * FROM users WHERE user_id=$1 AND guild_id=$2", message.author.id, message.guild.id
         )
         xp = record["xp"]
         level = record["level"]
