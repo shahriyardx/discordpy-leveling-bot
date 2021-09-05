@@ -51,8 +51,8 @@ async def increase_xp(pool: Pool, message, rate=5):
             "UPDATE users SET xp = $1, level = $2 WHERE user_id = $3 AND guild_id=$4",
             xp + rate,
             new_level,
-            user_id,
-            guild_id,
+            message.author.id,
+            message.guild.id,
         )
 
 
