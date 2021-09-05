@@ -9,7 +9,7 @@ async def create_tables(pool: Pool):
             """
             CREATE TABLE IF NOT EXISTS users(
                 id BIGSERIAL PRIMARY KEY NOT NULL,
-                user_id BIGINT NOT NULL PRIMARY KEY,
+                user_id BIGINT NOT NULL,
                 guild_id BIGINT NOT NULL,
                 xp BIGINT NOT NULL DEFAULT 5,
                 level BIGINT NOT NULL DEFAULT 0
