@@ -33,7 +33,7 @@ class Level(commands.Cog):
         poppins_small = Font().poppins(size=30)
 
         square = Canvas((500, 500), "#06FFBF")
-        square = Editor(canvas=square)
+        square = Editor(square)
         square.rotate(30, expand=True)
 
         background.paste(square.image, (600, -250))
